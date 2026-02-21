@@ -1,13 +1,4 @@
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import Image from "next/image";
 import Link from "next/link";
 import ROUTES from "@/constants/routes";
@@ -23,7 +14,7 @@ const MobileNavigation = () => {
           alt="menu"
           width={36}
           height={36}
-          className="invert-colors sm-hidden"
+          className="invert-colors sm:hidden"
         />
       </SheetTrigger>
       <SheetContent
