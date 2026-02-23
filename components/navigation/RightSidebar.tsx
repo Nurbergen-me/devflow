@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import ROUTES from "@/constants/routes";
 import Image from "next/image";
-import TagCards from "@/components/cards/TagCards";
+import TagCard from "@/components/cards/TagCard";
 
 const hotQuestions = [
   { _id: "1", title: "How to use React Hooks?" },
@@ -46,7 +46,7 @@ const RightSidebar = () => {
         <h3 className="h3-bold text-dark200_light900">Popular tags</h3>
         <div className="mt-7 flex flex-col gap-4">
           {popularTags.map(({ _id, name, questions }) => (
-            <TagCards
+            <TagCard
               key={_id}
               _id={_id}
               name={name}

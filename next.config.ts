@@ -4,7 +4,9 @@ const nextConfig: NextConfig = {
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
-  /* config options here */
+  images: {
+    remotePatterns: [{ protocol: "https", hostname: "www.svgrepo.com", port: "" }],
+  },
 };
 
 export default nextConfig;

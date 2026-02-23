@@ -7,12 +7,12 @@ import { getDeviconClassName } from "@/lib/utils";
 interface Props {
   _id: string;
   name: string;
-  questions: number;
+  questions?: number;
   showCount?: boolean;
   compact?: boolean;
 }
 
-const TagCards = ({ _id, name, questions, showCount, compact }: Props) => {
+const TagCard = ({ _id, name, questions, showCount, compact }: Props) => {
   const iconName = getDeviconClassName(name);
 
   return (
@@ -30,4 +30,4 @@ const TagCards = ({ _id, name, questions, showCount, compact }: Props) => {
     </Link>
   );
 };
-export default TagCards;
+export default TagCard;
