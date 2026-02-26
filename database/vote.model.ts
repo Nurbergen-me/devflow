@@ -1,6 +1,6 @@
 import { model, models, Schema, Types } from "mongoose";
 
-enum Type {
+enum ActionType {
   QUESTION = "question",
   ANSWER = "answer",
 }
@@ -12,21 +12,22 @@ enum VoteType {
 
 export interface IVote {
   author: Types.ObjectId;
-  id: Types.ObjectId;
-  type: Type;
+  actionId: Types.ObjectId;
+  actionType: ActionType;
   voteType: VoteType;
 }
 
+export interface IVoteDoc extends IVote, Document {}
 const VoteSchema = new Schema<IVote>(
   {
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    id: { type: Schema.Types.ObjectId, required: true },
-    type: { type: String, enum: Object.values(Type), required: true },
+    actionId: { type: Schema.Types.ObjectId, required: true },
+    actionType: { type: String, enum: Object.values(ActionType), required: true },
     voteType: { type: String, enum: Object.values(VoteType), required: true },
   },
   { timestamps: true }
 );
 
-const Vote = models?.vote || model("Vote", VoteSchema);
+const Vote = models?.Vote || model("Vote", VoteSchema);
 
 export default Vote;

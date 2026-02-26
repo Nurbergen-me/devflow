@@ -5,6 +5,7 @@ export interface ICollection {
   question: Types.ObjectId;
 }
 
+export interface ICollectionDoc extends ICollection, Document {}
 const CollectionSchema = new Schema<ICollection>(
   {
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -13,6 +14,6 @@ const CollectionSchema = new Schema<ICollection>(
   { timestamps: true }
 );
 
-const Collection = models?.collection || model("Collection", CollectionSchema);
+const Collection = models?.Collection || model("Collection", CollectionSchema);
 
 export default Collection;

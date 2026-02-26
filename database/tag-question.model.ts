@@ -5,7 +5,8 @@ export interface TagQuestion {
   question: Types.ObjectId;
 }
 
-const tagQuestionSchema = new Schema(
+export interface TagQuestionDoc extends TagQuestion, Document {}
+const TagQuestionSchema = new Schema(
   {
     tag: { type: Schema.Types.ObjectId, ref: "Tag", required: true },
     question: { type: Schema.Types.ObjectId, ref: "Question", required: true },
@@ -13,6 +14,6 @@ const tagQuestionSchema = new Schema(
   { timestamps: true }
 );
 
-const TagQuestion = models?.tagQuestion || model("TagQuestion", tagQuestionSchema);
+const TagQuestion = models?.TagQuestion || model("TagQuestion", TagQuestionSchema);
 
 export default TagQuestion;

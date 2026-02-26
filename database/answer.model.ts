@@ -8,6 +8,7 @@ export interface IAnswer {
   question: Types.ObjectId;
 }
 
+export interface IAnswerDoc extends IAnswer, Document {}
 const AnswerSchema = new Schema<IAnswer>(
   {
     content: { type: String, required: true },
@@ -19,6 +20,6 @@ const AnswerSchema = new Schema<IAnswer>(
   { timestamps: true }
 );
 
-const Answer = models?.answer || model<IAnswer>("Answer", AnswerSchema);
+const Answer = models?.Answer || model<IAnswer>("Answer", AnswerSchema);
 
 export default Answer;
