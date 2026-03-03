@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 
-import { NotFoundError } from "@humanfs/core";
 import { AccountSchema } from "@/lib/validations";
 import handleError from "@/lib/handlers/error";
 import { APIErrorResponse } from "@/types/global";
-import Account from "@/database/user.model";
-import { ValidationError } from "@/lib/http-errors";
+import { NotFoundError, ValidationError } from "@/lib/http-errors";
 import { z } from "zod";
 import dbConnect from "@/lib/mongoose";
+import Account from "@/database/account.model";
 
 export async function POST(request: Request) {
   const { providerAccountId } = await request.json();

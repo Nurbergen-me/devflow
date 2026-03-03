@@ -5,6 +5,7 @@ import LocalSearch from "@/components/search/LocalSearch";
 import HomeFilters from "@/components/filters/HomeFilters";
 import QuestionCard from "@/components/cards/QuestionCard";
 import { auth } from "@/auth";
+import { api } from "@/lib/api";
 
 const questions = [
   {

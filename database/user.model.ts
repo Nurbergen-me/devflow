@@ -1,4 +1,5 @@
 import { model, models, Schema, Document } from "mongoose";
+import { HydratedDocument } from "mongoose";
 
 export interface IUser {
   name: string;
@@ -11,7 +12,8 @@ export interface IUser {
   reputation?: number;
 }
 
-export interface IUserDoc extends IUser, Document {}
+// export interface IUserDoc extends IUser, Document {}
+export type IUserDoc = HydratedDocument<IUser>;
 const UserSchema = new Schema<IUser>(
   {
     name: { type: String, required: true },

@@ -11,11 +11,14 @@ import { ZodType } from "zod";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import Link from "next/link";
 import ROUTES from "@/constants/routes";
+import { ActionResponse } from "@/types/global";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
   defaultValues: T;
-  onSubmit: (data: T) => Promise<{ success: Boolean }>;
+  onSubmit: (data: T) => Promise<ActionResponse>;
   formType: "SIGN_IN" | "SIGN_UP";
 }
 
@@ -25,13 +28,23 @@ const AuthForm = <T extends FieldValues>({
   formType,
   onSubmit,
 }: AuthFormProps<T>) => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: standardSchemaResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
   });
 
   const handleSubmit = async (data: T) => {
-    // TODO
+    const result = (await onSubmit(data)) as ActionResponse;
+
+    if (result?.success) {
+      toast.success("Signed in successfully");
+
+      router.push(ROUTES.HOME);
+    } else {
+      toast.error(result?.error?.message || `Error ${result?.status}`);
+    }
   };
 
   let buttonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up";
