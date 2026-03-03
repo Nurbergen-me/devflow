@@ -4,8 +4,6 @@ import ROUTES from "@/constants/routes";
 import LocalSearch from "@/components/search/LocalSearch";
 import HomeFilters from "@/components/filters/HomeFilters";
 import QuestionCard from "@/components/cards/QuestionCard";
-import { auth } from "@/auth";
-import { api } from "@/lib/api";
 
 const questions = [
   {
@@ -51,9 +49,6 @@ interface SearchParams {
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
-  const session = await auth();
-  console.log("session", session);
-
   const { query = "", filter = "" } = await searchParams;
   const filteredQuestions = questions.filter((question) => {
     const matchesQuery = question.title.toLowerCase().includes(query?.toLowerCase());

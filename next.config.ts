@@ -6,7 +6,19 @@ const nextConfig: NextConfig = {
     turbopackFileSystemCacheForDev: true,
   },
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "www.svgrepo.com", port: "" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "www.svgrepo.com", port: "" },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        port: "",
+      },
+    ],
   },
 };
 
