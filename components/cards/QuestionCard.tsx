@@ -4,9 +4,10 @@ import Link from "next/link";
 import ROUTES from "@/constants/routes";
 import TagCard from "@/components/cards/TagCard";
 import Metric from "@/components/Metric";
+import { IQuestion, Tag } from "@/types/global";
 
 interface Props {
-  question: Question;
+  question: IQuestion;
 }
 
 const QuestionCard = ({
