@@ -8,16 +8,23 @@ import { Input } from "@/components/ui/input";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { MDXEditorMethods } from "@mdxeditor/editor";
-import { useRef } from "react";
+import { useRef, useTransition } from "react";
 import dynamic from "next/dynamic";
 import { z } from "zod";
 import TagCard from "@/components/cards/TagCard";
+import { createQuestion } from "@/lib/actions/question.action";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import ROUTES from "@/constants/routes";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
 const QuestionForm = () => {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const editorRef = useRef<MDXEditorMethods>(null);
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
@@ -53,8 +60,17 @@ const QuestionForm = () => {
     }
   };
 
-  const handleCreateQuestion = (data: z.infer<typeof AskQuestionSchema>) => {
-    console.log(data);
+  const handleCreateQuestion = async (data: z.infer<typeof AskQuestionSchema>) => {
+    startTransition(async () => {
+      const result = await createQuestion(data);
+
+      if (result.success) {
+        toast.success("Question created successfully");
+        if (result.data) router.push(ROUTES.QUESTION(result.data?._id.toString()));
+      } else {
+        toast.error(result.error?.message || "Something went wrong");
+      }
+    });
   };
 
   return (
@@ -160,8 +176,16 @@ const QuestionForm = () => {
           <Button
             type="submit"
             className="primary-gradient text-light-900 w-fit"
+            disabled={isPending}
           >
-            Ask a Question
+            {isPending ? (
+              <>
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
+                <span>Submitting</span>
+              </>
+            ) : (
+              <>Ask a Question</>
+            )}
           </Button>
         </div>
       </form>
