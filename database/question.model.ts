@@ -1,4 +1,4 @@
-import { HydratedDocument, model, models, Schema, Types } from "mongoose";
+import { HydratedDocument, Model, model, models, Schema, Types } from "mongoose";
 
 interface IQuestion {
   title: string;
@@ -17,7 +17,7 @@ const QuestionSchema = new Schema<IQuestion>(
   {
     title: { type: String, required: true },
     content: { type: String, required: true },
-    tags: [{ type: Schema.Types.ObjectId, ref: "Tags" }],
+    tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
     views: { type: Number, default: 0 },
     answers: { type: Number, default: 0 },
     upvotes: { type: Number, default: 0 },
@@ -27,6 +27,7 @@ const QuestionSchema = new Schema<IQuestion>(
   { timestamps: true }
 );
 
-const Question = models?.Question || model<IQuestion>("Question", QuestionSchema);
+const Question: Model<IQuestion> =
+  (models.Question as Model<IQuestion>) || model<IQuestion>("Question", QuestionSchema);
 
 export default Question;

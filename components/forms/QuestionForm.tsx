@@ -12,23 +12,33 @@ import { useRef, useTransition } from "react";
 import dynamic from "next/dynamic";
 import { z } from "zod";
 import TagCard from "@/components/cards/TagCard";
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ROUTES from "@/constants/routes";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { IQuestion } from "@/types/global";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
-const QuestionForm = () => {
+interface Props {
+  question?: IQuestion;
+  isEdit?: boolean;
+}
+
+const QuestionForm = ({ question, isEdit }: Props) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const editorRef = useRef<MDXEditorMethods>(null);
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
-    defaultValues: { title: "", content: "", tags: [] },
+    defaultValues: {
+      title: question?.title || "",
+      content: question?.content || "",
+      tags: question?.tags.map((tag) => tag.name) || [],
+    },
   });
 
   const handleInputKeyDown = (
@@ -62,10 +72,15 @@ const QuestionForm = () => {
 
   const handleCreateQuestion = async (data: z.infer<typeof AskQuestionSchema>) => {
     startTransition(async () => {
-      const result = await createQuestion(data);
+      let result;
+      if (isEdit && question) {
+        result = await editQuestion({ questionId: question._id, ...data });
+      } else {
+        result = await createQuestion(data);
+      }
 
       if (result.success) {
-        toast.success("Question created successfully");
+        toast.success(isEdit ? "Question updated successfully" : "Question created successfully");
         if (result.data) router.push(ROUTES.QUESTION(result.data?._id.toString()));
       } else {
         toast.error(result.error?.message || "Something went wrong");
@@ -184,7 +199,7 @@ const QuestionForm = () => {
                 <span>Submitting</span>
               </>
             ) : (
-              <>Ask a Question</>
+              <>{isEdit ? "Edit" : "Ask a Question"}</>
             )}
           </Button>
         </div>
