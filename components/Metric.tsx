@@ -8,13 +8,24 @@ interface Props {
   alt: string;
   value: string | number;
   title: string;
-  textStyle?: string;
+  textStyles?: string;
   imageStyles?: string;
   href?: string;
   isAuthor?: boolean;
+  titleStyles?: string;
 }
 
-const Metric = ({ imgUrl, alt, value, title, textStyle, href, isAuthor, imageStyles }: Props) => {
+const Metric = ({
+  imgUrl,
+  alt,
+  value,
+  title,
+  textStyles,
+  href,
+  isAuthor,
+  imageStyles,
+  titleStyles,
+}: Props) => {
   const metricContent = (
     <>
       <Image
@@ -24,11 +35,9 @@ const Metric = ({ imgUrl, alt, value, title, textStyle, href, isAuthor, imageSty
         width={16}
         height={16}
       />
-      <p className={cn("flex items-center gap-1")}>
+      <p className={cn("flex items-center gap-1", textStyles)}>
         {value}
-        <span className={cn("small-regular line-clamp-1", isAuthor ? "max-sm:hidden" : "")}>
-          {title}
-        </span>
+        <span className={cn("small-regular line-clamp-1", titleStyles)}>{title}</span>
       </p>
     </>
   );
