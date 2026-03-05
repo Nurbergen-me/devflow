@@ -33,7 +33,7 @@ const UserAvatar = ({ id, name, imageUrl, className = "h-9 w-9", fallbackClassNa
             className="object-cover"
             width={36}
             height={36}
-            quality={100}
+            quality={75}
           />
         ) : (
           <AvatarFallback
