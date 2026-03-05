@@ -4,7 +4,7 @@ import Link from "next/link";
 import ROUTES from "@/constants/routes";
 import TagCard from "@/components/cards/TagCard";
 import Metric from "@/components/Metric";
-import { IQuestion, Tag } from "@/types/global";
+import { IQuestion } from "@/types/global";
 
 interface Props {
   question: IQuestion;
@@ -26,7 +26,7 @@ const QuestionCard = ({
         </div>
       </div>
       <div className="mt-3.5 flex w-full flex-wrap gap-2">
-        {tags.map((tag: Tag) => (
+        {tags.map((tag) => (
           <TagCard
             key={tag._id}
             _id={tag._id}

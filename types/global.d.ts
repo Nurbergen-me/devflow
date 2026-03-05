@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 
-interface Tag {
+interface ITag {
   _id: string;
   name: string;
 }
 
-interface Author {
+interface IAuthor {
   _id: string;
   name: string;
   image: string;
@@ -15,8 +15,8 @@ interface IQuestion {
   _id: string;
   title: string;
   content: string;
-  tags: Tag[];
-  author: Author;
+  tags: ITag[];
+  author: IAuthor;
   createdAt: Date;
   views: number;
   answers: number;
