@@ -198,7 +198,7 @@
 }
 
 @utility background-light800_dark400 {
-  @apply bg-light-800! dark:bg-dark-400!;
+  @apply bg-light-800 dark:bg-dark-400;
   @apply bg-light-800 dark:bg-dark-400;
 }
 
