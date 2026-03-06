@@ -12,7 +12,7 @@ import { redirect } from "next/navigation";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
-  const { success, data: question } = await getQuestion({ questionId: id });
+  const { success, data: question } = await getQuestion({ questionId: id, increment: true });
 
   if (!success || !question) return redirect("/404");
 

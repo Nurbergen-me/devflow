@@ -120,6 +120,7 @@ export const EditQuestionSchema = AskQuestionSchema.extend({
 
 export const GetQuestionSchema = z.object({
   questionId: z.string().min(1, "Question ID is required"),
+  increment: z.boolean().optional(),
 });
 
 export const PaginatedSearchParamsSchema = z.object({

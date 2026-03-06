@@ -175,7 +175,7 @@ export async function getQuestion(params: GetQuestionParams): Promise<ActionResp
     return handleError(validationResult) as ErrorResponse;
   }
 
-  const { questionId } = validationResult.params!;
+  const { questionId, increment } = validationResult.params!;
 
   try {
     const question = await Question.findById(questionId)
@@ -184,6 +184,11 @@ export async function getQuestion(params: GetQuestionParams): Promise<ActionResp
 
     if (!question) {
       throw new Error("Question not found");
+    }
+
+    if (increment) {
+      question.views++;
+      await question.save();
     }
 
     return { success: true, data: JSON.parse(JSON.stringify(question)) };
