@@ -1,3 +1,4 @@
+import AllAnswers from "@/components/answers/AllAnswers";
 import { getAnswers } from "@/lib/actions/answer.action";
 import React from "react";
 import { ITag, RouteParams } from "@/types/global";
@@ -28,8 +29,6 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     pageSize: 10,
     filter: "latest",
   });
-
-  console.log("ANSWERS", answersResult);
 
   const { _id, author, title, createdAt, answers, views, tags, content } = question;
   return (
@@ -94,7 +93,16 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         ))}
       </div>
 
-      <section className="my-6">
+      <section className="my-5">
+        <AllAnswers
+          data={answersResult?.answers}
+          success={areAnswersLoaded}
+          error={answersError}
+          totalAnswers={answersResult?.totalAnswers || 0}
+        />
+      </section>
+
+      <section className="my-5">
         <AnswerForm questionId={_id} />
       </section>
     </>
