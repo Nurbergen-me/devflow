@@ -30,3 +30,7 @@ interface GetQuestionParams {
   questionId: string;
   increment?: boolean;
 }
+
+interface CreateAnswerParams extends GetQuestionParams {
+  content: string;
+}

@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import { createAnswer } from "@/lib/actions/answer.action";
+import React, { useRef, useState, useTransition } from "react";
 import { Form } from "@/components/ui/form";
 import { Controller, useForm } from "react-hook-form";
 import { AnswerSchema } from "@/lib/validations";
+import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MDXEditorMethods } from "@mdxeditor/editor";
@@ -15,8 +17,8 @@ import { Button } from "@/components/ui/button";
 
 const Editor = dynamic(() => import("@/components/editor"), { ssr: false });
 
-const AnswerForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const AnswerForm = ({ questionId }: { questionId: string }) => {
+  const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
 
   const editorRef = useRef<MDXEditorMethods>(null);
@@ -28,8 +30,20 @@ const AnswerForm = () => {
     },
   });
 
-  const handleSubmit = (data: z.infer<typeof AnswerSchema>) => {
-    console.log(data);
+  const handleSubmit = async (data: z.infer<typeof AnswerSchema>) => {
+    startAnsweringTransition(async () => {
+      const result = await createAnswer({
+        questionId,
+        content: data.content,
+      });
+
+      if (result.success) {
+        form.reset();
+        toast.success("Your answer has been posted successfully");
+      } else {
+        toast.error(result.error?.message || "Something went wrong");
+      }
+    });
   };
 
   return (
@@ -84,7 +98,7 @@ const AnswerForm = () => {
               type="submit"
               className="primary-gradient w-fit"
             >
-              {isSubmitting ? (
+              {isAnswering ? (
                 <>
                   <ReloadIcon className="mr-2 size-4 animate-spin" />
                   Posting...

@@ -17,7 +17,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
 
   if (!success || !question) return redirect("/404");
 
-  const { author, title, createdAt, answers, views, tags, content } = question;
+  const { _id, author, title, createdAt, answers, views, tags, content } = question;
   return (
     <>
       <div className="flex-start w-full flex-col">
@@ -81,7 +81,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
       </div>
 
       <section className="my-6">
-        <AnswerForm />
+        <AnswerForm questionId={_id} />
       </section>
     </>
   );
