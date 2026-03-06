@@ -1,3 +1,4 @@
+import { getAnswers } from "@/lib/actions/answer.action";
 import React from "react";
 import { ITag, RouteParams } from "@/types/global";
 import TagCard from "@/components/cards/TagCard";
@@ -16,6 +17,19 @@ const QuestionDetails = async ({ params }: RouteParams) => {
   const { success, data: question } = await getQuestion({ questionId: id, increment: true });
 
   if (!success || !question) return redirect("/404");
+
+  const {
+    success: areAnswersLoaded,
+    data: answersResult,
+    error: answersError,
+  } = await getAnswers({
+    questionId: id,
+    page: 1,
+    pageSize: 10,
+    filter: "latest",
+  });
+
+  console.log("ANSWERS", answersResult);
 
   const { _id, author, title, createdAt, answers, views, tags, content } = question;
   return (

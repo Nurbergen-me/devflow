@@ -55,3 +55,16 @@ interface PaginatedSearchParams {
 interface GetTagQuesionsParams extends Omit<PaginatedSearchParams, "filter"> {
   tagId: string;
 }
+
+interface IAnswer {
+  _id: string;
+  content: string;
+  author: IAuthor;
+  createdAt: Date;
+  upvotes: number;
+  downvotes: number;
+}
+
+interface GetAnswersParams extends PaginatedSearchParams {
+  questionId: string;
+}
