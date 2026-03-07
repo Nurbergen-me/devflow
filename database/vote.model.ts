@@ -5,10 +5,12 @@ enum ActionType {
   ANSWER = "answer",
 }
 
-export enum VoteType {
-  UPVOTE = "upvote",
-  DOWNVOTE = "downvote",
-}
+export const VoteType = {
+  UPVOTE: "upvote",
+  DOWNVOTE: "downvote",
+} as const;
+
+export type VoteType = (typeof VoteType)[keyof typeof VoteType];
 
 export interface IVote {
   author: Types.ObjectId;
