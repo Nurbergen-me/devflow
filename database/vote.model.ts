@@ -1,11 +1,11 @@
-import { model, models, Schema, Types } from "mongoose";
+import { Model, model, models, Schema, Types } from "mongoose";
 
 enum ActionType {
   QUESTION = "question",
   ANSWER = "answer",
 }
 
-enum VoteType {
+export enum VoteType {
   UPVOTE = "upvote",
   DOWNVOTE = "downvote",
 }
@@ -18,7 +18,7 @@ export interface IVote {
 }
 
 export interface IVoteDoc extends IVote, Document {}
-const VoteSchema = new Schema<IVote>(
+const VoteSchema = new Schema<IVoteDoc>(
   {
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
     actionId: { type: Schema.Types.ObjectId, required: true },
@@ -28,6 +28,7 @@ const VoteSchema = new Schema<IVote>(
   { timestamps: true }
 );
 
-const Vote = models?.Vote || model("Vote", VoteSchema);
+const Vote: Model<IVoteDoc> =
+  (models?.Vote as Model<IVoteDoc>) || model<IVoteDoc>("Vote", VoteSchema);
 
 export default Vote;

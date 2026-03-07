@@ -1,4 +1,4 @@
-import { Model, model, models, Schema, Types } from "mongoose";
+import { HydratedDocument, Model, model, models, Schema, Types } from "mongoose";
 
 export interface IAnswer {
   content: string;
@@ -8,7 +8,8 @@ export interface IAnswer {
   question: Types.ObjectId;
 }
 
-export interface IAnswerDoc extends IAnswer, Document {}
+// export interface IAnswerDoc extends IAnswer, Document {}
+export type IAnswerDoc = HydratedDocument<IAnswer>;
 const AnswerSchema = new Schema<IAnswerDoc>(
   {
     content: { type: String, required: true },

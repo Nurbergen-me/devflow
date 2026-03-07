@@ -13,7 +13,7 @@ interface IQuestion {
 
 // export interface IQuestionDoc extends IQuestion, Document {}
 export type IQuestionDoc = HydratedDocument<IQuestion>;
-const QuestionSchema = new Schema<IQuestion>(
+const QuestionSchema = new Schema<IQuestionDoc>(
   {
     title: { type: String, required: true },
     content: { type: String, required: true },
@@ -27,7 +27,7 @@ const QuestionSchema = new Schema<IQuestion>(
   { timestamps: true }
 );
 
-const Question: Model<IQuestion> =
-  (models.Question as Model<IQuestion>) || model<IQuestion>("Question", QuestionSchema);
+const Question: Model<IQuestionDoc> =
+  (models.Question as Model<IQuestionDoc>) || model<IQuestionDoc>("Question", QuestionSchema);
 
 export default Question;
