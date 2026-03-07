@@ -1,12 +1,15 @@
 import { Preview } from "@/components/editor/Preview";
 import UserAvatar from "@/components/UserAvatar";
+import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
+import { hasVoted } from "@/lib/actions/vote.action";
 import { getTimeStamp } from "@/lib/utils";
 import { IAnswer } from "@/types/global";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 
-const AnswerCard = ({ _id, content, author, createdAt }: IAnswer) => {
+const AnswerCard = ({ _id, content, author, createdAt, upvotes, downvotes }: IAnswer) => {
+  const hasVotedPromise = hasVoted({ targetType: "answer", targetId: _id });
   return (
     <article className="light-border border-b py-10">
       <span
@@ -36,7 +39,17 @@ const AnswerCard = ({ _id, content, author, createdAt }: IAnswer) => {
           </Link>
         </div>
 
-        <div className="flex justify-end">Votes</div>
+        <div className="flex justify-end">
+          <Suspense fallback={<div>Loading...</div>}>
+            <Votes
+              upvotes={upvotes}
+              downvotes={downvotes}
+              targetType="answer"
+              targetId={_id}
+              hasVotedPromise={hasVotedPromise}
+            />
+          </Suspense>
+        </div>
       </div>
 
       <Preview content={content} />
