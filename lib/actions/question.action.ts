@@ -168,7 +168,6 @@ export async function getQuestion(params: GetQuestionParams): Promise<ActionResp
   const validationResult = await action({
     params,
     schema: GetQuestionSchema,
-    authorize: true,
   });
 
   if (validationResult instanceof Error) {

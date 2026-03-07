@@ -61,6 +61,9 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
   };
 
   const generateAIAnswer = async () => {
+    if (session.status !== "authenticated") {
+      return toast.error("You need to be logged in to generate an AI answer");
+    }
     setIsAISubmitting(true);
 
     try {
