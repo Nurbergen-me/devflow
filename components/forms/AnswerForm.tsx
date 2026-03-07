@@ -1,6 +1,9 @@
 "use client";
 
+import { auth } from "@/auth";
 import { createAnswer } from "@/lib/actions/answer.action";
+import { api } from "@/lib/api";
+import { useSession } from "next-auth/react";
 import React, { useRef, useState, useTransition } from "react";
 import { Form } from "@/components/ui/form";
 import { Controller, useForm } from "react-hook-form";
@@ -17,9 +20,16 @@ import { Button } from "@/components/ui/button";
 
 const Editor = dynamic(() => import("@/components/editor"), { ssr: false });
 
-const AnswerForm = ({ questionId }: { questionId: string }) => {
+interface Props {
+  questionId: string;
+  questionTitle: string;
+  questionContent: string;
+}
+
+const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
   const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
+  const session = useSession();
 
   const editorRef = useRef<MDXEditorMethods>(null);
 
@@ -40,10 +50,36 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
       if (result.success) {
         form.reset();
         toast.success("Your answer has been posted successfully");
+
+        if (editorRef.current) {
+          editorRef.current.setMarkdown("");
+        }
       } else {
         toast.error(result.error?.message || "Something went wrong");
       }
     });
+  };
+
+  const generateAIAnswer = async () => {
+    setIsAISubmitting(true);
+
+    try {
+      const { success, data, error } = await api.ai.getAnswer(questionTitle, questionContent);
+      if (!success) toast.error(error?.message || "Failed to generate AI answer");
+
+      const formattedAnswer = data?.replace(/<br>/g, " ").toString().trim() || "";
+
+      if (editorRef.current) {
+        editorRef.current.setMarkdown(formattedAnswer);
+        form.setValue("content", formattedAnswer);
+        await form.trigger("content");
+      }
+      toast.success("AI answer generated successfully");
+    } catch (error) {
+      toast.error("Failed to generate AI answer");
+    } finally {
+      setIsAISubmitting(false);
+    }
   };
 
   return (
@@ -53,6 +89,7 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
         <Button
           className="btn light-border-2 text-primary-500 dark:text-primary-500 gap-1.5 rounded-md border px-4 py-2.5 shadow-none"
           disabled={isAISubmitting}
+          onClick={generateAIAnswer}
         >
           {isAISubmitting ? (
             <>
