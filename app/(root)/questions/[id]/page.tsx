@@ -1,4 +1,5 @@
 import AllAnswers from "@/components/answers/AllAnswers";
+import Votes from "@/components/votes/Votes";
 import { getAnswers } from "@/lib/actions/answer.action";
 import React from "react";
 import { ITag, RouteParams } from "@/types/global";
@@ -49,7 +50,12 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           </div>
 
           <div className="flex justify-end">
-            <p>Votes</p>
+            <Votes
+              upvotes={question.upvotes}
+              downvotes={question.downvotes}
+              hasUpvoted={true}
+              hasDownvoted={false}
+            />
           </div>
         </div>
 

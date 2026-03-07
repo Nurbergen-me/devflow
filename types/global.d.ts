@@ -21,6 +21,7 @@ interface IQuestion {
   views: number;
   answers: number;
   upvotes: number;
+  downvotes: number;
 }
 
 type ActionResponse<T = null> = {
