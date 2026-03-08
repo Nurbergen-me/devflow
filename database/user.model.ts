@@ -1,4 +1,4 @@
-import { model, models, Schema, Document } from "mongoose";
+import { model, models, Schema, Model } from "mongoose";
 import { HydratedDocument } from "mongoose";
 
 export interface IUser {
@@ -14,7 +14,7 @@ export interface IUser {
 
 // export interface IUserDoc extends IUser, Document {}
 export type IUserDoc = HydratedDocument<IUser>;
-const UserSchema = new Schema<IUser>(
+const UserSchema = new Schema<IUserDoc>(
   {
     name: { type: String, required: true },
     username: { type: String, required: true },
@@ -28,6 +28,7 @@ const UserSchema = new Schema<IUser>(
   { timestamps: true }
 );
 
-const User = models?.User || model<IUser>("User", UserSchema);
+const User: Model<IUserDoc> =
+  (models?.User as Model<IUserDoc>) || model<IUserDoc>("User", UserSchema);
 
 export default User;

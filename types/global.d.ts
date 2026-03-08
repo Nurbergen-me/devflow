@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { string } from "zod";
 
 interface ITag {
   _id: string;
@@ -68,4 +69,16 @@ interface IAnswer {
 
 interface GetAnswersParams extends PaginatedSearchParams {
   questionId: string;
+}
+
+interface IUser {
+  _id: string;
+  name: string;
+  username: string;
+  email: string;
+  bio?: string;
+  image?: string;
+  location?: string;
+  portfolio?: string;
+  reputation: number;
 }
