@@ -166,7 +166,7 @@ export async function getSavedQuestions(
     ]);
 
     const questions = result.data;
-    const totalCount = result.count[0].count || 0;
+    const totalCount = result.count[0]?.count || 0;
 
     const isNext = totalCount > skip + questions.length;
 
