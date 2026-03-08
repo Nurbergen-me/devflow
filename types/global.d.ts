@@ -82,3 +82,9 @@ interface IUser {
   portfolio?: string;
   reputation: number;
 }
+
+interface ICollection {
+  _id: string;
+  question: IQuestion;
+  author: IAuthor | string;
+}
