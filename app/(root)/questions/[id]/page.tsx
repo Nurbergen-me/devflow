@@ -1,6 +1,8 @@
 import AllAnswers from "@/components/answers/AllAnswers";
+import SaveQuestions from "@/components/questions/SaveQuestions";
 import Votes from "@/components/votes/Votes";
 import { getAnswers } from "@/lib/actions/answer.action";
+import { hasSavedQuestion } from "@/lib/actions/collection.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import React, { Suspense } from "react";
 import { ITag, RouteParams } from "@/types/global";
@@ -33,6 +35,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
   });
 
   const hasVotedPromise = hasVoted({ targetId: question._id, targetType: "question" });
+  const hasSavedPromise = hasSavedQuestion({ questionId: question._id });
 
   const { _id, author, title, createdAt, answers, views, tags, content } = question;
   return (
@@ -52,7 +55,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
             </Link>
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex items-center justify-end gap-4">
             <Suspense fallback={<div>Loading...</div>}>
               <Votes
                 upvotes={question.upvotes}
@@ -60,6 +63,12 @@ const QuestionDetails = async ({ params }: RouteParams) => {
                 targetType="question"
                 targetId={question._id}
                 hasVotedPromise={hasVotedPromise}
+              />
+            </Suspense>
+            <Suspense>
+              <SaveQuestions
+                questionId={question._id}
+                hasSavedPromise={hasSavedPromise}
               />
             </Suspense>
           </div>
