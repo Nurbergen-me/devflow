@@ -8,7 +8,7 @@ import { PaginatedSearchParamsSchema } from "@/lib/validations";
 import { ActionResponse, ErrorResponse, IUser, PaginatedSearchParams } from "@/types/global";
 import mongoose from "mongoose";
 
-export async function getUser(
+export async function getUsers(
   params: PaginatedSearchParams
 ): Promise<ActionResponse<{ users: IUser[]; isNext: boolean }>> {
   const validatedResult = await action({
@@ -44,18 +44,18 @@ export async function getUser(
 
   const filterQuery: mongoose.QueryFilter<IUserDoc> = {};
 
-  filterQuery.$or = [
-    {
-      name: { $regex: query, $options: "i" },
-      email: { $regex: query, $options: "i" },
-    },
-  ];
+  if (query) {
+    filterQuery.$or = [
+      { name: { $regex: query, $options: "i" } },
+      { email: { $regex: query, $options: "i" } },
+    ];
+  }
 
   try {
     const totalUsers = await User.countDocuments(filterQuery);
     const users = await User.find(filterQuery).sort(sortCriteria).skip(skip).limit(limit);
 
-    const isNext = users.length > 0 && users.length === limit;
+    const isNext = totalUsers > skip + limit;
 
     return { success: true, data: { users: JSON.parse(JSON.stringify(users)), isNext } };
   } catch (error) {
