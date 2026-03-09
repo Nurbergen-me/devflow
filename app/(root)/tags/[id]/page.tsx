@@ -1,3 +1,5 @@
+import CommonFilter from "@/components/filters/CommonFilter";
+import { HomePageFilters, TagFilters } from "@/constants/filters";
 import React from "react";
 import { RouteParams } from "@/types/global";
 import { getTagQuestions } from "@/lib/actions/tag.action";
@@ -31,7 +33,7 @@ const Page = async ({ params, searchParams }: RouteParams) => {
       <section className="mt-11">
         <LocalSearch
           imgSrc="/icons/search.svg"
-          placeholder="Search questions..."
+          placeholder="Search tags..."
           otherClasses="flex-1"
           route={ROUTES.TAG(id)}
         />

@@ -1,4 +1,6 @@
 import { auth } from "@/auth";
+import CommonFilter from "@/components/filters/CommonFilter";
+import { CollectionFilters } from "@/constants/filters";
 import { getSavedQuestions } from "@/lib/actions/collection.action";
 import ROUTES from "@/constants/routes";
 import LocalSearch from "@/components/search/LocalSearch";
@@ -38,8 +40,11 @@ const CollectionPage = async ({ searchParams }: SearchParams) => {
           otherClasses="flex-1"
           route={ROUTES.COLLECTION}
         />
+        <CommonFilter
+          filters={CollectionFilters}
+          otherClasses="min-h-[56px] sm:min-w-[170px]"
+        />
       </section>
-      <HomeFilters />
       <div className="mt-10 flex w-full flex-col gap-6">
         <DataRenderer
           success={success}

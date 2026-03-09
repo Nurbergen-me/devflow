@@ -57,6 +57,8 @@ export async function getTags(
       break;
   }
 
+  console.log("Filter criteria:", sortCriteria, filter);
+
   try {
     const totalTags = await Tag.countDocuments(filterQuery);
     const tags = await Tag.find(filterQuery).sort(sortCriteria).skip(skip).limit(limit).lean();

@@ -17,8 +17,9 @@ import { getQuestion } from "@/lib/actions/question.action";
 import { redirect } from "next/navigation";
 import AnswerForm from "@/components/forms/AnswerForm";
 
-const QuestionDetails = async ({ params }: RouteParams) => {
+const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
+  const { page, pageSize, filter } = await searchParams;
   const { success, data: question } = await getQuestion({ questionId: id, increment: true });
 
   if (!success || !question) return redirect("/404");
@@ -29,9 +30,9 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     error: answersError,
   } = await getAnswers({
     questionId: id,
-    page: 1,
-    pageSize: 10,
-    filter: "latest",
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    filter,
   });
 
   const hasVotedPromise = hasVoted({ targetId: question._id, targetType: "question" });
