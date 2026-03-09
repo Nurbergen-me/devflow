@@ -1,5 +1,6 @@
 "use server";
 
+import dbConnect from "@/lib/mongoose";
 import mongoose from "mongoose";
 
 import Question, { IQuestionDoc } from "@/database/question.model";
@@ -253,6 +254,21 @@ export async function getQuestions(
     return {
       success: true,
       data: { questions: JSON.parse(JSON.stringify(questions)), isNext },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
+
+export async function getHotQuestions(): Promise<ActionResponse<IQuestion[]>> {
+  try {
+    await dbConnect();
+
+    const questions = await Question.find().sort({ views: -1, upvotes: -1 }).limit(5);
+
+    return {
+      success: true,
+      data: JSON.parse(JSON.stringify(questions)),
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;
