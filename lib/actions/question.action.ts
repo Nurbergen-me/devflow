@@ -1,11 +1,13 @@
 "use server";
 
+import ROUTES from "@/constants/routes";
 import dbConnect from "@/lib/mongoose";
 import mongoose from "mongoose";
 
 import Question, { IQuestionDoc } from "@/database/question.model";
 import TagQuestion from "@/database/tag-question.model";
 import Tag, { ITagDoc } from "@/database/tag.model";
+import { revalidatePath } from "next/cache";
 
 import action from "../handlers/action";
 import handleError from "../handlers/error";
@@ -69,6 +71,7 @@ export async function createQuestion(
     );
 
     await session.commitTransaction();
+    revalidatePath(ROUTES.QUESTION(question._id.toString()));
 
     return { success: true, data: JSON.parse(JSON.stringify(question)) };
   } catch (error) {
@@ -155,6 +158,7 @@ export async function editQuestion(params: EditQuestionParams): Promise<ActionRe
 
     await question.save({ session });
     await session.commitTransaction();
+    revalidatePath(ROUTES.QUESTION(questionId));
 
     return { success: true, data: JSON.parse(JSON.stringify(question)) };
   } catch (error) {
