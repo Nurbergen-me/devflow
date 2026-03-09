@@ -8,8 +8,11 @@ import Image from "next/image";
 import TagCard from "@/components/cards/TagCard";
 
 const RightSidebar = async () => {
-  const { success, data: hotQuestions, error } = await getHotQuestions();
-  const { success: tagSuccess, data: tags, error: tagError } = await getTopTags();
+  const [
+    { success, data: hotQuestions, error },
+    { success: tagSuccess, data: tags, error: tagError },
+  ] = await Promise.all([getHotQuestions(), getTopTags()]);
+
   return (
     <section className="custom-scrollbar background-light900_dark200 shadow-light-300 light-border sticky top-0 right-0 flex h-screen w-87.5 flex-col gap-6 overflow-y-auto border-l p-6 pt-36 max-xl:hidden max-sm:hidden dark:shadow-none">
       <div>
