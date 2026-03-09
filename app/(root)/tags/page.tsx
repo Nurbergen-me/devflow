@@ -1,4 +1,5 @@
 import CommonFilter from "@/components/filters/CommonFilter";
+import Pagination from "@/components/Pagination";
 import { TagFilters } from "@/constants/filters";
 import React from "react";
 import { getTags } from "@/lib/actions/tag.action";
@@ -18,7 +19,7 @@ const Tags = async ({ searchParams }: RouteParams) => {
     filter: filter || "",
   });
 
-  const tags = data?.tags;
+  const { tags, isNext } = data || {};
 
   return (
     <>
@@ -50,6 +51,11 @@ const Tags = async ({ searchParams }: RouteParams) => {
             ))}
           </div>
         )}
+      />
+
+      <Pagination
+        page={page}
+        isNext={isNext || false}
       />
     </>
   );

@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import CommonFilter from "@/components/filters/CommonFilter";
+import Pagination from "@/components/Pagination";
 import { CollectionFilters } from "@/constants/filters";
 import { getSavedQuestions } from "@/lib/actions/collection.action";
 import ROUTES from "@/constants/routes";
@@ -27,7 +28,7 @@ const CollectionPage = async ({ searchParams }: SearchParams) => {
 
   if (!loggedInUser) return redirect(ROUTES.SIGN_IN);
 
-  const collection = data?.collection || [];
+  const { collection, isNext } = data || {};
 
   return (
     <>
@@ -59,6 +60,11 @@ const CollectionPage = async ({ searchParams }: SearchParams) => {
               />
             ))
           }
+        />
+
+        <Pagination
+          page={page}
+          isNext={isNext || false}
         />
       </div>
     </>

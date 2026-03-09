@@ -1,4 +1,5 @@
 import CommonFilter from "@/components/filters/CommonFilter";
+import Pagination from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filters";
 import Link from "next/link";
@@ -23,7 +24,7 @@ const Home = async ({ searchParams }: SearchParams) => {
     filter: filter || "",
   });
 
-  const questions = data?.questions || [];
+  const { questions, isNext } = data || {};
 
   return (
     <>
@@ -61,6 +62,10 @@ const Home = async ({ searchParams }: SearchParams) => {
               />
             ))
           }
+        />
+        <Pagination
+          page={page}
+          isNext={isNext || false}
         />
       </div>
     </>

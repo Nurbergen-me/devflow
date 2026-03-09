@@ -102,7 +102,6 @@ export async function getTagQuestions(
       filterQuery.title = { $regex: new RegExp(query, "i") };
     }
 
-    let sortCriteria = {};
     const totalQuestions = await Question.countDocuments(filterQuery);
     const questions = await Question.find(filterQuery)
       .select("_id title views answers upvotes downvotes author createdAt")
@@ -110,7 +109,6 @@ export async function getTagQuestions(
         { path: "tags", select: "name" },
         { path: "author", select: "name image" },
       ])
-      .sort(sortCriteria)
       .skip(skip)
       .limit(limit)
       .lean();

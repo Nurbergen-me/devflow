@@ -1,13 +1,9 @@
-import CommonFilter from "@/components/filters/CommonFilter";
-import { HomePageFilters, TagFilters } from "@/constants/filters";
+import Pagination from "@/components/Pagination";
 import React from "react";
 import { RouteParams } from "@/types/global";
 import { getTagQuestions } from "@/lib/actions/tag.action";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import ROUTES from "@/constants/routes";
 import LocalSearch from "@/components/search/LocalSearch";
-import HomeFilters from "@/components/filters/HomeFilters";
 import DataRenderer from "@/components/DataRenderer";
 import { EMPTY_QUESTION } from "@/constants/states";
 import QuestionCard from "@/components/cards/QuestionCard";
@@ -22,7 +18,7 @@ const Page = async ({ params, searchParams }: RouteParams) => {
     pageSize: Number(pageSize) || 10,
     query: query || "",
   });
-  const questions = data?.questions;
+  const { questions, isNext } = data || {};
 
   return (
     <>
@@ -54,6 +50,11 @@ const Page = async ({ params, searchParams }: RouteParams) => {
             ))}
           </div>
         )}
+      />
+
+      <Pagination
+        page={page}
+        isNext={isNext || false}
       />
     </>
   );
