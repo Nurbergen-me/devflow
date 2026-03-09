@@ -82,6 +82,7 @@ interface IUser {
   location?: string;
   portfolio?: string;
   reputation: number;
+  createdAt: Date;
 }
 
 interface ICollection {
