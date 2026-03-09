@@ -90,3 +90,9 @@ interface ICollection {
   question: IQuestion;
   author: IAuthor | string;
 }
+
+interface BadgeCounts {
+  GOLD: number;
+  SILVER: number;
+  BRONZE: number;
+}

@@ -81,8 +81,8 @@ export async function getUser(params: {
     const user = await User.findById(userId);
     if (!user) return handleError(new Error("User not found")) as ErrorResponse;
 
-    const totalQuestions = await Question.countDocuments({ userId });
-    const totalAnswers = await Answer.countDocuments({ userId });
+    const totalQuestions = await Question.countDocuments({ author: userId });
+    const totalAnswers = await Answer.countDocuments({ author: userId });
 
     return {
       success: true,
