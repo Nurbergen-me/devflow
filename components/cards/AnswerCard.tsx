@@ -3,17 +3,32 @@ import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
 import { hasVoted } from "@/lib/actions/vote.action";
-import { getTimeStamp } from "@/lib/utils";
+import { cn, getTimeStamp } from "@/lib/utils";
 import { IAnswer } from "@/types/global";
 import Link from "next/link";
 import React, { Suspense } from "react";
 
-const AnswerCard = ({ _id, content, author, createdAt, upvotes, downvotes }: IAnswer) => {
+interface Props extends IAnswer {
+  containerClasses: string;
+  showReadMore?: boolean;
+}
+
+const AnswerCard = ({
+  _id,
+  content,
+  author,
+  createdAt,
+  upvotes,
+  downvotes,
+  question,
+  containerClasses,
+  showReadMore,
+}: Props) => {
   const hasVotedPromise = hasVoted({ targetType: "answer", targetId: _id });
   return (
-    <article className="light-border border-b py-10">
+    <article className={cn("light-border border-b py-10", containerClasses)}>
       <span
-        id={JSON.stringify(_id)}
+        id={`answer-${_id}`}
         className="hash-span"
       />
 
@@ -53,6 +68,15 @@ const AnswerCard = ({ _id, content, author, createdAt, upvotes, downvotes }: IAn
       </div>
 
       <Preview content={content} />
+
+      {showReadMore && (
+        <Link
+          href={`/questions/${question}#answer-${_id}`}
+          className="body-semibold font-space-grotesk text-primary-500 relative z-10"
+        >
+          <p className="mt-1">Read more...</p>
+        </Link>
+      )}
     </article>
   );
 };

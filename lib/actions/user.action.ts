@@ -6,13 +6,15 @@ import action from "@/lib/handlers/action";
 import handleError from "@/lib/handlers/error";
 import {
   GetUserQuestionsSchema,
+  GetUsersAnswersSchema,
   GetUserSchema,
   PaginatedSearchParamsSchema,
 } from "@/lib/validations";
-import { GetUserParams, GetUserQuestionsParams } from "@/types/action";
+import { GetUserAnswersParams, GetUserParams, GetUserQuestionsParams } from "@/types/action";
 import {
   ActionResponse,
   ErrorResponse,
+  IAnswer,
   IQuestion,
   IUser,
   PaginatedSearchParams,
@@ -133,6 +135,40 @@ export async function getUserQuestions(
     return {
       success: true,
       data: { questions: JSON.parse(JSON.stringify(questions)), isNext },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
+
+export async function getUserAnswers(
+  params: GetUserAnswersParams
+): Promise<ActionResponse<{ answers: IAnswer[]; isNext: boolean }>> {
+  const validatedResult = await action({
+    params,
+    schema: GetUsersAnswersSchema,
+  });
+
+  if (validatedResult instanceof Error) {
+    return handleError(validatedResult) as ErrorResponse;
+  }
+
+  const { page = 1, pageSize = 10, userId } = validatedResult.params!;
+  const skip = (Number(page) - 1) * pageSize;
+  const limit = Number(pageSize);
+
+  try {
+    const totalAnswers = await Answer.countDocuments({ author: userId });
+    const answers = await Answer.find({ author: userId })
+      .populate("author", "name image")
+      .skip(skip)
+      .limit(limit);
+
+    const isNext = totalAnswers > skip + limit;
+
+    return {
+      success: true,
+      data: { answers: JSON.parse(JSON.stringify(answers)), isNext },
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;
