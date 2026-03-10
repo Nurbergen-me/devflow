@@ -9,9 +9,10 @@ interface Props {
   page: number | string | undefined;
   isNext: boolean;
   containerClasses?: string;
+  pageKey?: string;
 }
 
-const Pagination = ({ page = 1, isNext, containerClasses }: Props) => {
+const Pagination = ({ page = 1, isNext, containerClasses, pageKey = "page" }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -19,7 +20,7 @@ const Pagination = ({ page = 1, isNext, containerClasses }: Props) => {
     const nextPageNumber = type === "prev" ? Number(page) - 1 : Number(page) + 1;
     const newUrl = formUrlQuery({
       params: searchParams.toString(),
-      key: "page",
+      key: pageKey,
       value: nextPageNumber.toString(),
     });
     router.push(newUrl);

@@ -4,6 +4,7 @@ interface ITag {
   _id: string;
   name: string;
   questions: number;
+  count?: number;
 }
 
 interface IAuthor {
