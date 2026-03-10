@@ -5,6 +5,7 @@ import { Collection, Question } from "@/database";
 import action from "@/lib/handlers/action";
 import handleError from "@/lib/handlers/error";
 import { CollectionBaseSchema, PaginatedSearchParamsSchema } from "@/lib/validations";
+import { CollectionBaseParams } from "@/types/action";
 import {
   ActionResponse,
   ErrorResponse,

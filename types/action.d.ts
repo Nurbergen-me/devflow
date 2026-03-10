@@ -1,3 +1,5 @@
+import { PaginatedSearchParams } from "@/types/global";
+
 interface SignInWithOAuthParams {
   provider: "github" | "google";
   providerAccountId: string;
@@ -57,5 +59,9 @@ interface CollectionBaseParams {
 }
 
 interface GetUserParams {
+  userId: string;
+}
+
+interface GetUserQuestionsParams extends Omit<PaginatedSearchParams, "filter" | "query" | "sort"> {
   userId: string;
 }

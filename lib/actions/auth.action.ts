@@ -1,5 +1,6 @@
 "use server";
 
+import { AuthCredentials } from "@/types/action";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 

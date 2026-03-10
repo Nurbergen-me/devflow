@@ -4,6 +4,7 @@ import { IAnswerDoc } from "@/database/answer.model";
 import action from "@/lib/handlers/action";
 import handleError from "@/lib/handlers/error";
 import { AnswerServerSchema, GetAnswersSchema } from "@/lib/validations";
+import { CreateAnswerParams } from "@/types/action";
 import mongoose from "mongoose";
 import { Answer, Question } from "@/database";
 import { ActionResponse, ErrorResponse, GetAnswersParams, IAnswer } from "@/types/global";

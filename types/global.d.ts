@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { string } from "zod";
 
 interface ITag {
   _id: string;

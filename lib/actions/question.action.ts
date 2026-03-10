@@ -2,6 +2,7 @@
 
 import ROUTES from "@/constants/routes";
 import dbConnect from "@/lib/mongoose";
+import { CreateQuestionParams, EditQuestionParams, GetQuestionParams } from "@/types/action";
 import mongoose from "mongoose";
 
 import Question, { IQuestionDoc } from "@/database/question.model";

@@ -2,6 +2,7 @@ import { fetchHandler } from "@/lib/handlers/fetch";
 import { IUser } from "@/database/user.model";
 import { IAccount } from "@/database/account.model";
 import ROUTES from "@/constants/routes";
+import { SignInWithOAuthParams } from "@/types/action";
 import { ActionResponse, APIResponse } from "@/types/global";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";

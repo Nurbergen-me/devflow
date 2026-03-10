@@ -7,6 +7,12 @@ import action from "@/lib/handlers/action";
 import handleError from "@/lib/handlers/error";
 import { ValidationError } from "@/lib/http-errors";
 import { CreateVoteSchema, HasVotedSchema, UpdateVoteCountSchema } from "@/lib/validations";
+import {
+  CreateVoteParams,
+  HasVotedParams,
+  HasVotedResponse,
+  UpdateVoteCountParams,
+} from "@/types/action";
 import { ActionResponse, ErrorResponse } from "@/types/global";
 import mongoose, { ClientSession } from "mongoose";
 import { revalidatePath } from "next/cache";
