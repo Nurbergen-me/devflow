@@ -1,12 +1,12 @@
-import { model, models, Schema, Types } from "mongoose";
+import { HydratedDocument, Model, model, models, Schema, Types } from "mongoose";
 
 export interface TagQuestion {
   tag: Types.ObjectId;
   question: Types.ObjectId;
 }
 
-export interface TagQuestionDoc extends TagQuestion, Document {}
-const TagQuestionSchema = new Schema(
+export type TagQuestionDoc = HydratedDocument<TagQuestion>;
+const TagQuestionSchema = new Schema<TagQuestionDoc>(
   {
     tag: { type: Schema.Types.ObjectId, ref: "Tag", required: true },
     question: { type: Schema.Types.ObjectId, ref: "Question", required: true },
@@ -14,6 +14,8 @@ const TagQuestionSchema = new Schema(
   { timestamps: true }
 );
 
-const TagQuestion = models?.TagQuestion || model("TagQuestion", TagQuestionSchema);
+const TagQuestion: Model<TagQuestionDoc> =
+  (models?.TagQuestion as Model<TagQuestionDoc>) ||
+  model<TagQuestionDoc>("TagQuestion", TagQuestionSchema);
 
 export default TagQuestion;
