@@ -1,6 +1,7 @@
 "use server";
 
 import { IAnswerDoc } from "@/database/answer.model";
+import { createInteraction } from "@/lib/actions/interaction.action";
 import action from "@/lib/handlers/action";
 import handleError from "@/lib/handlers/error";
 import { AnswerServerSchema, DeleteAnswerSchema, GetAnswersSchema } from "@/lib/validations";
@@ -10,6 +11,7 @@ import { Answer, Question, Vote } from "@/database";
 import { ActionResponse, ErrorResponse, GetAnswersParams, IAnswer } from "@/types/global";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
+import { after } from "next/server";
 
 export async function createAnswer(
   params: CreateAnswerParams
@@ -48,6 +50,15 @@ export async function createAnswer(
 
     question.answers += 1;
     await question.save({ session });
+
+    after(async () => {
+      await createInteraction({
+        authorId: userId!,
+        actionId: question.id.toString(),
+        actionTarget: "answer",
+        action: "post",
+      });
+    });
 
     await session.commitTransaction();
 
@@ -155,6 +166,15 @@ export async function deleteAnswer(params: DeleteAnswerParams): Promise<ActionRe
     await Vote.deleteMany({ actionId: answerId, actionType: "answer" }).session(session);
 
     await Answer.findByIdAndDelete(answerId).session(session);
+
+    after(async () => {
+      await createInteraction({
+        authorId: userId!,
+        actionId: answerId,
+        actionTarget: "answer",
+        action: "delete",
+      });
+    });
 
     await session.commitTransaction();
 

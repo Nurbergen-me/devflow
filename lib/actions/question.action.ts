@@ -2,6 +2,7 @@
 
 import ROUTES from "@/constants/routes";
 import { Answer, Collection, Vote } from "@/database";
+import { createInteraction } from "@/lib/actions/interaction.action";
 import dbConnect from "@/lib/mongoose";
 import {
   CreateQuestionParams,
@@ -15,6 +16,7 @@ import Question, { IQuestionDoc } from "@/database/question.model";
 import TagQuestion from "@/database/tag-question.model";
 import Tag, { ITagDoc } from "@/database/tag.model";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 
 import action from "../handlers/action";
 import handleError from "../handlers/error";
@@ -77,6 +79,15 @@ export async function createQuestion(
       { $push: { tags: { $each: tagIds } } },
       { session }
     );
+
+    after(async () => {
+      await createInteraction({
+        authorId: userId!,
+        actionId: question.id.toString(),
+        actionTarget: "question",
+        action: "post",
+      });
+    });
 
     await session.commitTransaction();
     revalidatePath(ROUTES.QUESTION(question._id.toString()));
@@ -340,6 +351,15 @@ export async function deleteQuestion(params: DeleteQuestionParams): Promise<Acti
     }
 
     await Question.findByIdAndDelete(questionId).session(session);
+
+    after(async () => {
+      await createInteraction({
+        authorId: userId!,
+        actionId: questionId,
+        actionTarget: "question",
+        action: "delete",
+      });
+    });
 
     await session.commitTransaction();
     await session.endSession();

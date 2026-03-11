@@ -3,6 +3,7 @@
 import ROUTES from "@/constants/routes";
 import { Answer, Question, Vote } from "@/database";
 import { VoteType } from "@/database/vote.model";
+import { createInteraction } from "@/lib/actions/interaction.action";
 import action from "@/lib/handlers/action";
 import handleError from "@/lib/handlers/error";
 import { ValidationError } from "@/lib/http-errors";
@@ -16,6 +17,7 @@ import {
 import { ActionResponse, ErrorResponse } from "@/types/global";
 import mongoose, { ClientSession } from "mongoose";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 
 export async function updateVoteCount(
   params: UpdateVoteCountParams,
@@ -75,6 +77,16 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
   session.startTransaction();
 
   try {
+    let ContentDoc;
+
+    if (targetType === "question") {
+      ContentDoc = await Question.findById(targetId).session(session);
+    } else if (targetType === "answer") {
+      ContentDoc = await Answer.findById(targetId).session(session);
+    }
+    if (!ContentDoc) throw new Error("Content not found");
+    const contentAuthorId = ContentDoc.author.toString();
+
     const existingVote = await Vote.findOne({
       author: userId,
       actionId: targetId,
@@ -109,8 +121,17 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
       );
       await updateVoteCount({ targetId, targetType, voteType, change: 1 }, session);
     }
-    await session.commitTransaction();
 
+    after(async () => {
+      await createInteraction({
+        action: voteType,
+        actionId: targetId,
+        actionTarget: targetType,
+        authorId: contentAuthorId,
+      });
+    });
+
+    await session.commitTransaction();
     revalidatePath(ROUTES.QUESTION(targetId));
 
     return { success: true };
