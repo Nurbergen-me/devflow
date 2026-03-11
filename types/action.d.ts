@@ -1,4 +1,6 @@
+import { IInteractionDoc, InteractionActionEnum } from "@/database/interaction.model";
 import { PaginatedSearchParams } from "@/types/global";
+import mongoose from "mongoose";
 
 interface SignInWithOAuthParams {
   provider: "github" | "google";
@@ -80,4 +82,18 @@ interface DeleteQuestionParams {
 
 interface DeleteAnswerParams {
   answerId: string;
+}
+
+interface CreateInteractionParams {
+  authorId: string;
+  actionId: string;
+  actionTarget: "question" | "answer";
+  action: InteractionActionEnum;
+}
+
+interface UpdateReputationParams {
+  interaction: IInteractionDoc;
+  session: mongoose.ClientSession;
+  performerId: string;
+  authorId: string;
 }

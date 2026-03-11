@@ -1,4 +1,15 @@
-import { model, models, Schema, Types } from "mongoose";
+import { HydratedDocument, Model, model, models, Schema, Types } from "mongoose";
+
+export const InteractionActionEnum = [
+  "views",
+  "upvotes",
+  "downvotes",
+  "bookmark",
+  "post",
+  "edit",
+  "delete",
+  "search",
+] as const;
 
 enum ActionType {
   QUESTION = "question",
@@ -12,17 +23,19 @@ export interface IInteraction {
   actionType: ActionType;
 }
 
-export interface IInteractionDoc extends IInteraction, Document {}
-const InteractionSchema = new Schema<IInteraction>(
+export type IInteractionDoc = HydratedDocument<IInteraction>;
+const InteractionSchema = new Schema<IInteractionDoc>(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    action: { type: String, required: true },
+    action: { type: String, enum: InteractionActionEnum, required: true },
     actionId: { type: Schema.Types.ObjectId, required: true },
     actionType: { type: String, enum: Object.values(ActionType), required: true },
   },
   { timestamps: true }
 );
 
-const Interaction = models?.Interaction || model("Interaction", InteractionSchema);
+const Interaction: Model<IInteractionDoc> =
+  (models?.Interaction as Model<IInteractionDoc>) ||
+  model<IInteractionDoc>("Interaction", InteractionSchema);
 
 export default Interaction;
