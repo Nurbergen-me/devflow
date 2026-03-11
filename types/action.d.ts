@@ -88,7 +88,7 @@ interface CreateInteractionParams {
   authorId: string;
   actionId: string;
   actionTarget: "question" | "answer";
-  action: InteractionActionEnum;
+  action: "view" | "upvote" | "downvote" | "bookmark" | "post" | "edit" | "delete" | "search";
 }
 
 interface UpdateReputationParams {

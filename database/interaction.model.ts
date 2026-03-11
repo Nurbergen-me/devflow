@@ -2,14 +2,25 @@ import { HydratedDocument, Model, model, models, Schema, Types } from "mongoose"
 
 export const InteractionActionEnum = [
   "views",
-  "upvotes",
-  "downvotes",
+  "upvote",
+  "downvote",
   "bookmark",
   "post",
   "edit",
   "delete",
   "search",
 ] as const;
+
+enum InteractionAction {
+  views = "views",
+  upvote = "upvote",
+  downvote = "downvote",
+  bookmark = "bookmark",
+  post = "post",
+  edit = "edit",
+  delete = "delete",
+  search = "search",
+}
 
 enum ActionType {
   QUESTION = "question",
