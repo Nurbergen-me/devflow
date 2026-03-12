@@ -13,6 +13,7 @@ import {
   getUser,
   getUserAnswers,
   getUserQuestions,
+  getUserStats,
   getUserTopTags,
 } from "@/lib/actions/user.action";
 import { RouteParams } from "@/types/global";
@@ -29,7 +30,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
 
   const loggedInUser = await auth();
 
-  const [userData, userQuestions, userAnswers, userTopTags] = await Promise.all([
+  const [userData, userQuestions, userAnswers, userTopTags, userBadges] = await Promise.all([
     getUser({ userId: id }),
     getUserQuestions({ userId: id, page: Number(page) || 1, pageSize: Number(pageSize) || 2 }),
     getUserAnswers({
@@ -38,6 +39,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       pageSize: Number(answersPageSize) || 2,
     }),
     getUserTopTags({ userId: id }),
+    getUserStats({ userId: id }),
   ]);
 
   const { success, data, error } = userData;
@@ -49,7 +51,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       </div>
     );
 
-  const { user, totalQuestions, totalAnswers } = data!;
+  const { user } = data!;
   const { _id, name, image, portfolio, location, createdAt, username, bio } = user;
 
   return (
@@ -102,16 +104,14 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
           )}
         </div>
       </section>
-      <Stats
-        totalQuestions={totalQuestions}
-        totalAnswers={totalAnswers}
-        badges={{
-          GOLD: 0,
-          SILVER: 0,
-          BRONZE: 0,
-        }}
-        reputationPoints={user.reputation || 0}
-      />
+      {userBadges.data && (
+        <Stats
+          totalQuestions={userBadges.data.totalQuestions}
+          totalAnswers={userBadges.data.totalAnswers}
+          badges={userBadges.data.badges || { GOLD: 0, SILVER: 0, BRONZE: 0 }}
+          reputationPoints={user.reputation || 0}
+        />
+      )}
       <section className="mt-10 flex gap-10">
         <Tabs
           defaultValue="top-posts"
