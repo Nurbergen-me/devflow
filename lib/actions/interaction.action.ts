@@ -33,6 +33,12 @@ export async function updateReputation(params: UpdateReputationParams) {
       break;
   }
 
+  if (performerId === authorId) {
+    await User.findByIdAndUpdate(performerId, { $inc: { reputation: authorPoints } }, { session });
+
+    return;
+  }
+
   await User.bulkWrite(
     [
       {
@@ -41,17 +47,12 @@ export async function updateReputation(params: UpdateReputationParams) {
           update: { $inc: { reputation: performerPoints } },
         },
       },
-      // only add author update if different user
-      ...(performerId !== authorId
-        ? [
-            {
-              updateOne: {
-                filter: { _id: authorId },
-                update: { $inc: { reputation: authorPoints } },
-              },
-            },
-          ]
-        : []),
+      {
+        updateOne: {
+          filter: { _id: authorId },
+          update: { $inc: { reputation: authorPoints } },
+        },
+      },
     ],
     { session }
   );
