@@ -47,7 +47,7 @@ const Home = async ({ searchParams }: SearchParams) => {
           containerClasses="hidden max-md:flex"
         />
       </section>
-      <HomeFilters />
+      <HomeFilters filters={HomePageFilters} />
       <div className="mt-10 flex w-full flex-col gap-6">
         <DataRenderer
           success={success}

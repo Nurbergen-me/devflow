@@ -85,7 +85,6 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
       ContentDoc = await Answer.findById(targetId).session(session);
     }
     if (!ContentDoc) throw new Error("Content not found");
-    const contentAuthorId = ContentDoc.author.toString();
 
     const existingVote = await Vote.findOne({
       author: userId,
@@ -127,7 +126,7 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
         action: voteType,
         actionId: targetId,
         actionTarget: targetType,
-        authorId: contentAuthorId,
+        authorId: userId,
       });
     });
 

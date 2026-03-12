@@ -6,16 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { formUrlQuery, removeKeysFromUrlQuery } from "@/lib/url";
 
-const filters = [
-  { name: "React", value: "react" },
-  { name: "Javascript", value: "javascript" },
-  // { name: "Newest", value: "newest" },
-  // { name: "Popular", value: "popular" },
-  // { name: "Unanswered", value: "unanswered" },
-  // { name: "Recommended", value: "recommended" },
-];
-
-const HomeFilters = () => {
+const HomeFilters = ({ filters }: { filters: { name: string; value: string }[] }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const filterParams = searchParams.get("filter");
@@ -42,7 +33,7 @@ const HomeFilters = () => {
     router.replace(newUrl, { scroll: false });
   };
   return (
-    <div className="mt-10 hidden flex-wrap gap-3 sm:flex">
+    <div className="mt-10 hidden flex-wrap gap-3 md:flex">
       {filters.map(({ name, value }) => (
         <Button
           key={value}

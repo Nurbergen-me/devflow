@@ -157,21 +157,21 @@ export async function getUserStats(params: GetUserParams): Promise<
 
     const badges = assignBadges({
       criteria: [
-        { type: "ANSWER_COUNT", count: answerStats.count },
-        { type: "QUESTION_COUNT", count: questionStats.count },
+        { type: "ANSWER_COUNT", count: answerStats?.count || 0 },
+        { type: "QUESTION_COUNT", count: questionStats?.count || 0 },
         {
           type: "QUESTION_UPVOTES",
-          count: questionStats.upvotes + answerStats.upvotes,
+          count: questionStats?.upvotes || 0 + answerStats?.upvotes || 0,
         },
-        { type: "TOTAL_VIEWS", count: questionStats.views },
+        { type: "TOTAL_VIEWS", count: questionStats?.views || 0 },
       ],
     });
 
     return {
       success: true,
       data: {
-        totalQuestions: questionStats.count,
-        totalAnswers: answerStats.count,
+        totalQuestions: questionStats?.count || 0,
+        totalAnswers: answerStats?.count || 0,
         badges,
       },
     };

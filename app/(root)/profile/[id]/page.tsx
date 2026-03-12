@@ -30,7 +30,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
 
   const loggedInUser = await auth();
 
-  const [userData, userQuestions, userAnswers, userTopTags, userBadges] = await Promise.all([
+  const [userData, userQuestions, userAnswers, userTopTags, userStats] = await Promise.all([
     getUser({ userId: id }),
     getUserQuestions({ userId: id, page: Number(page) || 1, pageSize: Number(pageSize) || 2 }),
     getUserAnswers({
@@ -104,11 +104,11 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
           )}
         </div>
       </section>
-      {userBadges.data && (
+      {userStats.data && (
         <Stats
-          totalQuestions={userBadges.data.totalQuestions}
-          totalAnswers={userBadges.data.totalAnswers}
-          badges={userBadges.data.badges || { GOLD: 0, SILVER: 0, BRONZE: 0 }}
+          totalQuestions={userStats.data.totalQuestions}
+          totalAnswers={userStats.data.totalAnswers}
+          badges={userStats.data.badges || { GOLD: 0, SILVER: 0, BRONZE: 0 }}
           reputationPoints={user.reputation || 0}
         />
       )}
