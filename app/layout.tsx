@@ -79,9 +79,6 @@ export const metadata = {
     ],
   },
 
-  // Optional: Theme color for browser UI and mobile experience
-  themeColor: "#18181b",
-
   // Optional: Color for Microsoft tiles and pinned sites
   msapplication: {
     TileColor: "#ffffff",

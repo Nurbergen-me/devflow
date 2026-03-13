@@ -10,7 +10,7 @@ import Link from "next/link";
 import React, { Suspense } from "react";
 
 interface Props extends IAnswer {
-  containerClasses: string;
+  containerClasses?: string;
   showReadMore?: boolean;
   showActionBtns?: boolean;
 }
